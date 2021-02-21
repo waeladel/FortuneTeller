@@ -11,6 +11,12 @@ android {
     def keystoreProperties = new Properties()
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+    buildFeatures {
+        //dataBinding true
+        // for view binding:
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.fortuneteller.cup"
         minSdkVersion 16

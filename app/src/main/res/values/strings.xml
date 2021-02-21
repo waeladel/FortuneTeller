@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Cup  Fortune Teller</string>
+    <string name="welcome_message">Meet your fear</string>
+    <string name="confirm_button_title">Accept</string>
+
+    <string name="storage_permission_dialog_title">Camera permission</string>
+    <string name="storage_permission_dialog_message">The app needs access to your camera to take a picture of your cup.</string>
+
+    <string name="confirm_dialog_negative_button">Cancel</string>
+    <string name="confirm_dialog_positive_button">OK</string>
+
 </resources>
