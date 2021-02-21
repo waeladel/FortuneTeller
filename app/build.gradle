@@ -6,6 +6,11 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    // Load keystore
+    def keystorePropertiesFile = rootProject.file("keystore.properties");
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
     defaultConfig {
         applicationId "com.fortuneteller.cup"
         minSdkVersion 16
@@ -18,12 +23,12 @@ android {
     }
 
     signingConfigs {
-        /*release {
+        release {
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-        }*/
+        }
     }
 
     buildTypes {
@@ -41,7 +46,7 @@ android {
             // R8 configuration files.
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             //debuggable true
             ndk {
                 debugSymbolLevel 'FULL' // debug symbols file for native code to make crashes and ANRs easier to analyze
