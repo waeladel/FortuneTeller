@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,21 +20,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.fortuneteller.cup.CameraPermissionAlertFragment;
 import com.fortuneteller.cup.Interface.ItemClickListener;
+import com.fortuneteller.cup.R;
 import com.fortuneteller.cup.databinding.MainFragmentBinding;
+
+import java.util.List;
+
+import static com.fortuneteller.cup.Utils.FilesHelper.createImageUri;
 
 public class MainFragment extends Fragment implements ItemClickListener {
     private final static String TAG = MainFragment.class.getSimpleName();
 
     private MainViewModel mViewModel;
     private MainFragmentBinding mBinding;
-    private Context mActivityContext;
+    private Context mContext;
     private Activity activity;
     private FragmentManager mFragmentManager;
     private  static final String PERMISSION_RATIONALE_FRAGMENT = "cameraPermissionFragment";
@@ -84,7 +94,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mActivityContext = context;
+        mContext = context;
 
         if (context instanceof Activity){// check if fragmentContext is an activity
             activity =(Activity) context;
@@ -96,20 +106,42 @@ public class MainFragment extends Fragment implements ItemClickListener {
     }
 
     private void openCamera() {
+        Log.i(TAG, "selectMedia. capture picture");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        // Ensure that there's a camera activity to handle the intent
+        List<ResolveInfo> listPhotosCam = mContext.getPackageManager().queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (listPhotosCam.size() <= 0) {
+            Log.i(TAG, "No camera app to handel the intent");
+            Toast.makeText(mContext, R.string.no_camera_app_error, Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Create a file location to tell the camera to save the new photo at it
+        Uri mMediaUri = createImageUri(mContext);
+        if(mMediaUri != null){
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri); // Pass the new file uri in the intent extras
+        }
+        Log.d(TAG, "mMediaUri= "+mMediaUri);
+                /*takePictureIntent.setClipData(ClipData.newRawUri("", mediaUri));
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+        try {
+            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
     }
 
     // If Storage and camera permissions are granted return true so that we stop asking for permissions
     private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
-            return (ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
+            return (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
         }else{
-            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
+            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
 
-            return (ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(mActivityContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+            return (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
         }
 
     }
@@ -150,7 +182,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
     }
 
     private void showPermissionRationaleDialog() {
-        CameraPermissionAlertFragment permissionRationaleDialog = CameraPermissionAlertFragment.newInstance(mActivityContext, this);
+        CameraPermissionAlertFragment permissionRationaleDialog = CameraPermissionAlertFragment.newInstance(mContext, this);
         permissionRationaleDialog.show(mFragmentManager, PERMISSION_RATIONALE_FRAGMENT);
         Log.i(TAG, "showPermissionRationaleDialog: permission AlertFragment show clicked ");
     }
@@ -179,13 +211,12 @@ public class MainFragment extends Fragment implements ItemClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "requestCode ="+ requestCode);
-        if (data != null) {
-            switch (requestCode){
-                case CAMERA_REQUEST_CODE:
-                    // returning from the camera after capture the photo
-                    Log.d(TAG, "open camera requestCode= "+ requestCode);
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:
+                // returning from the camera after capture the photo
+                Log.d(TAG, "open camera requestCode= "+ requestCode);
+                // Display the fortune message
                 break;
-            }
         }
     }
 
