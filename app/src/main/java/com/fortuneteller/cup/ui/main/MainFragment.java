@@ -12,9 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,7 +57,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
     private static final int CAMERA_REQUEST_CODE = 111;
     // Random number generator
     private static int mRandomAnswer ;// 0 - 7;
-    private MediaPlayer mediaPlayer; // To play the theme
 
     private String[] mTestArray;
     private ArrayAdapter<String> mAdapter;
@@ -76,17 +72,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
 
         mFragmentManager = getChildFragmentManager(); // Needed to open the rational dialog
         navController = NavHostFragment.findNavController(this);
-
-        mediaPlayer = new MediaPlayer(); //App.getMediaPlayer();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21
-            mediaPlayer.setAudioAttributes(
-                    new AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .build());
-        } else {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-        }
 
     }
 
@@ -112,9 +97,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
                 }
             }
         });
-
-        // Play music
-        playMusic();
 
         return view;
     }
@@ -297,25 +279,4 @@ public class MainFragment extends Fragment implements ItemClickListener {
 
     }
 
-    public void playMusic(){
-        mediaPlayer.reset();
-        mediaPlayer.setLooping(false);
-        try {
-            Uri uri = Uri.parse("android.resource://"+ mContext.getPackageName()+ File.separator + R.raw.the_cup_reader_theme);
-            mediaPlayer.setDataSource(mContext, uri);
-            //mediaPlayer.create(mContext, R.raw.the_cup_reader_theme);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mediaPlayer.stop();
-        mediaPlayer.release();
-    }
 }
