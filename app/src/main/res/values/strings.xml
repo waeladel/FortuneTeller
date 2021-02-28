@@ -1,12 +1,46 @@
 <resources>
-    <string name="app_name">Cup  Fortune Teller</string>
-    <string name="welcome_message">Meet your fear</string>
+    <string name="app_name">The Cup Reader</string>
+    <string name="welcome_message">Ready to meet your fear?</string>
     <string name="confirm_button_title">Accept</string>
+    <string name="next_button_title">Next</string>
 
     <string name="storage_permission_dialog_title">Camera permission</string>
     <string name="storage_permission_dialog_message">The app needs access to your camera to take a picture of your cup.</string>
 
     <string name="confirm_dialog_negative_button">Cancel</string>
+    <string name="confirm_dialog_dismiss_button">Dismiss</string>
     <string name="confirm_dialog_positive_button">OK</string>
     <string name="no_camera_app_error">Sorry, there is no camera app.</string>
+
+    <!-- Answers array -->
+    <string name="answer1">answer1</string>
+    <string name="answer2">answer2</string>
+    <string name="answer3">answer3</string>
+    <string name="answer4">answer4</string>
+    <string name="answer5">answer5</string>
+    <string name="answer6">answer6</string>
+    <string name="answer7">answer7</string>
+    <string name="answer8">answer8</string>
+    <string name="answer9">answer9</string>
+    <string name="answer10">answer10</string>
+    <string name="answer11">answer11</string>
+    <!-- Answers array -->
+
+    <!-- gender array -->
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <!-- gender type array -->
+
+    <!--Input text helper-->
+    <string name="required_helper">*Required</string>
+    <string name="user_name_hint">Name</string>
+    <string name="user_birthday_headline">Birth date</string>
+
+    <!--hints and titles-->
+    <string name="user_gender_headline">Gender</string>
+    <string name="birthday_gender_hint">MM:DD:YYYY</string>
+
+    <!--Images content Description-->
+    <string name="save_button_description">Save button</string>
+
 </resources>

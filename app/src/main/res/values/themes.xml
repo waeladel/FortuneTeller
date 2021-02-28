@@ -12,5 +12,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!--Component styles-->
+        <item name="textInputStyle">@style/EditTextStyle.MyTheme</item>
+
     </style>
+
 </resources>

@@ -1,9 +1,4 @@
-package com.fortuneteller.cup.ui.main;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
+package com.fortuneteller.cup.ui.answer;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,19 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,41 +18,44 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.fortuneteller.cup.ui.AnswerAlertFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.fortuneteller.cup.ui.CameraPermissionAlertFragment;
 import com.fortuneteller.cup.Interface.ItemClickListener;
 import com.fortuneteller.cup.R;
-import com.fortuneteller.cup.databinding.FragmentMainBinding;
+import com.fortuneteller.cup.databinding.FragmentAnswerBinding;
 
-import java.io.File;
 import java.util.List;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 import static com.fortuneteller.cup.Utils.FilesHelper.createImageUri;
 
-public class MainFragment extends Fragment implements ItemClickListener {
-    private final static String TAG = MainFragment.class.getSimpleName();
+public class AnswerFragment extends Fragment implements ItemClickListener {
+    private final static String TAG = AnswerFragment.class.getSimpleName();
 
-    private MainViewModel mViewModel;
-    private FragmentMainBinding mBinding;
+    private AnswerViewModel mViewModel;
+    private FragmentAnswerBinding mBinding;
     private Context mContext;
     private Activity activity;
     private FragmentManager mFragmentManager;
     private  static final String PERMISSION_RATIONALE_FRAGMENT = "cameraPermissionFragment";
-    private  static final String ANSWER_ALERT_FRAGMENT = "answerAlertFragment";
     private static final int REQUEST_CAMERA_PERMISSIONS_CODE = 124;
     private static final int CAMERA_REQUEST_CODE = 111;
     // Random number generator
     private static int mRandomAnswer ;// 0 - 7;
-    private MediaPlayer mediaPlayer; // To play the theme
 
     private String[] mTestArray;
     private ArrayAdapter<String> mAdapter;
-    private NavController navController ;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static AnswerFragment newInstance() {
+        return new AnswerFragment();
     }
 
     @Override
@@ -75,18 +63,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
         super.onCreate(savedInstanceState);
 
         mFragmentManager = getChildFragmentManager(); // Needed to open the rational dialog
-        navController = NavHostFragment.findNavController(this);
-
-        mediaPlayer = new MediaPlayer(); //App.getMediaPlayer();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21
-            mediaPlayer.setAudioAttributes(
-                    new AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .build());
-        } else {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-        }
 
     }
 
@@ -97,32 +73,27 @@ public class MainFragment extends Fragment implements ItemClickListener {
 
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.main_fragment, container, false);
-        mBinding = FragmentMainBinding.inflate(inflater, container, false);
+        mBinding = FragmentAnswerBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
-        mBinding.acceptButton.setOnClickListener(new View.OnClickListener() {
+        /*mBinding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Accept button click");
                 if (!isPermissionGranted()) {
                     requestPermission();
                 }else{
-                    //openCamera();
-                    //playMusic();
-                    navController.navigate(R.id.editProfileFragment);
+                    openCamera();
                 }
             }
-        });
-
-        // Play music
-        playMusic();
-
+        });*/
+        
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(AnswerViewModel.class);
         //
     }
 
@@ -130,7 +101,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-
 
         if (context instanceof Activity){// check if fragmentContext is an activity
             activity =(Activity) context;
@@ -265,10 +235,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
                     mAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mTestArray);
 
                     Log.d(TAG, "onActivityResult: answer= "+mAdapter.getItem(mRandomAnswer));
-
-                    AnswerAlertFragment answerAlertFragment = AnswerAlertFragment.newInstance(mContext, mAdapter.getItem(mRandomAnswer));
-                    answerAlertFragment.show(mFragmentManager, ANSWER_ALERT_FRAGMENT);
-
                     break;
             }
         }
@@ -295,27 +261,5 @@ public class MainFragment extends Fragment implements ItemClickListener {
 
         }
 
-    }
-
-    public void playMusic(){
-        mediaPlayer.reset();
-        mediaPlayer.setLooping(false);
-        try {
-            Uri uri = Uri.parse("android.resource://"+ mContext.getPackageName()+ File.separator + R.raw.the_cup_reader_theme);
-            mediaPlayer.setDataSource(mContext, uri);
-            //mediaPlayer.create(mContext, R.raw.the_cup_reader_theme);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mediaPlayer.stop();
-        mediaPlayer.release();
     }
 }

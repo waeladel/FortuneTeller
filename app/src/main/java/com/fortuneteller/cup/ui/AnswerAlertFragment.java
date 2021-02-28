@@ -1,21 +1,22 @@
-package com.fortuneteller.cup;
+package com.fortuneteller.cup.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.fortuneteller.cup.Interface.ItemClickListener;
+import com.fortuneteller.cup.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class CameraPermissionAlertFragment extends DialogFragment {
-    private final static String TAG = CameraPermissionAlertFragment.class.getSimpleName();
+public class AnswerAlertFragment extends DialogFragment {
+    private final static String TAG = AnswerAlertFragment.class.getSimpleName();
 
     private static final int REQUEST_STORAGE_PERMISSIONS_CODE = 124;
+    private final static String ANSWER_MESSAGE_KEY = "answerKey";
 
     private Context mActivityContext;
     private Activity activity;
@@ -26,23 +27,21 @@ public class CameraPermissionAlertFragment extends DialogFragment {
     // click listener to pass click events to parent fragment
     //private static ItemClickListener itemClickListen;
 
-    private CameraPermissionAlertFragment() {
+    private AnswerAlertFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static CameraPermissionAlertFragment newInstance(Context context , ItemClickListener itemClickListener) {
+    public static AnswerAlertFragment newInstance(Context context , String answer) {
 
         // instantiate click listener to pass click events to parent fragment
         sContext = context;
 
-        // instantiate click listener to pass click events to parent fragment
-        sItemClickListen = itemClickListener;
-
-        CameraPermissionAlertFragment fragment = new CameraPermissionAlertFragment();
+        AnswerAlertFragment fragment = new AnswerAlertFragment();
         Bundle args = new Bundle();
         //args.putParcelableArrayList(PRIVET_CONTACTS_KEY, privateContacts);
+        args.putString(ANSWER_MESSAGE_KEY, answer);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,9 +61,13 @@ public class CameraPermissionAlertFragment extends DialogFragment {
         // created options to select from
         //CharSequence options[] = new CharSequence[]{getString(R.string.alert_dialog_edit), getString(R.string.alert_dialog_unreveal)};
         MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(sContext);
-        alertDialogBuilder.setTitle(getString(R.string.storage_permission_dialog_title));
-        alertDialogBuilder.setMessage(R.string.storage_permission_dialog_message);
-        alertDialogBuilder.setPositiveButton(R.string.confirm_dialog_positive_button,  new DialogInterface.OnClickListener() {
+        //alertDialogBuilder.setTitle(getString(R.string.edit_unreveal_alert_dialog_title));
+        //alertDialogBuilder.setMessage(R.string.speaker_dialog_message);
+        // get answer from arguments
+        if (getArguments() != null) {
+            alertDialogBuilder.setMessage(getArguments().getString(ANSWER_MESSAGE_KEY));
+        }
+       /* alertDialogBuilder.setPositiveButton(R.string.confirm_dialog_positive_button,  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // on success
@@ -73,9 +76,9 @@ public class CameraPermissionAlertFragment extends DialogFragment {
                     sItemClickListen.onClick(null, 1, false);
                 }
             }
-        });
+        });*/
 
-        alertDialogBuilder.setNegativeButton(R.string.confirm_dialog_negative_button, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(R.string.confirm_dialog_dismiss_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (dialog != null) {

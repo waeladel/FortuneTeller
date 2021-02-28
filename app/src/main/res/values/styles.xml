@@ -1,0 +1,39 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <!-- Bottom Navigation - just to make it surface style not primary -->
+    <style name="BottomNavigationView.MyTheme" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!--<item name="itemTextAppearanceInactive">?textAppearanceSubtitle1</item>-->
+        <!--<item name="itemIconTint">@drawable/bottom_nav_item_tint</item>-->
+        <!--<item name="itemTextColor">@drawable/bottom_nav_item_tint</item>-->
+
+        <!--Make the text of selected item bold -->
+        <!--<item name="itemTextAppearanceInactive">?attr/textAppearanceCaptionBold</item>-->
+        <!--<item name="itemTextAppearanceActive">?attr/textAppearanceCaptionBold</item>-->
+    </style>
+
+
+    <!--to make Edit text OutlinedBox-->
+    <style name="EditTextStyle.MyTheme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+       <!--<item name="boxStrokeColor">?colorOnBackground</item>-->
+    </style>
+
+    <!--to change calender's background to elevated surface-->
+    <style name="DatePickerMyTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!--<item name="boxStrokeColor">@color/color_on_background</item>
+        <item name="showTitle">false</item>
+        <item name="colorControlActivated">#ffea00</item>
+        <item name="colorControlHighlight">#c51162</item>
+        <item name="android:headerBackground">#00c853</item>
+        <item name="android:calendarViewShown">false</item>-->
+        <!--<item name="android:background">?colorSurface</item>-->
+        <!--<item name="boxStrokeColor">@color/color_error</item>-->
+        <!--<item name="android:datePickerStyle">@style/MyDatePickerStyle</item>-->
+        <!--<item name="android:headerBackground">#ffea00</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorAccent">@color/color_secondary</item>
+        <item name="boxStrokeColor">@color/color_secondary</item>-->
+    </style>
+
+</resources>
