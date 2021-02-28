@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.fortuneteller.cup.ui.main.MainFragment"
-        android:label="fragment_main"
+        android:label="@string/title_main_fragment"
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_editProfileFragment"
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.fortuneteller.cup.ui.editprofile.EditProfileFragment"
-        android:label="EditProfileFragment" />
+        android:label="@string/title_edit_profile" />
 
 
 </navigation>

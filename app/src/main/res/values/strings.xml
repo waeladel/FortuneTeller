@@ -12,6 +12,11 @@
     <string name="confirm_dialog_positive_button">OK</string>
     <string name="no_camera_app_error">Sorry, there is no camera app.</string>
 
+    <!--buttons and menus -->
+    <string name="title_main_fragment">Read Cup</string>
+    <string name="title_edit_profile">Edit Profile</string>
+
+
     <!-- Answers array -->
     <string name="answer1">answer1</string>
     <string name="answer2">answer2</string>
