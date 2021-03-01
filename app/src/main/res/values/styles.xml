@@ -34,6 +34,14 @@
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorAccent">@color/color_secondary</item>
         <item name="boxStrokeColor">@color/color_secondary</item>-->
+
+        <!-- Define primary color. used for buttons -->
+        <item name="colorPrimary">?colorPrimaryVariant</item>
+        <item name="android:background">@color/color_surface_24_elevation</item>
+        <!--<item name="android:windowBackground">?colorSurface</item>-->
+        <item name="android:backgroundDimAmount">@dimen/alert_dim_amount</item>
+        <!--<item name="android:windowElevation" tools:targetApi="lollipop">@dimen/keyLine_2</item>-->
+
     </style>
 
     <!--To make the Surface toolbar primary not surface -->
@@ -42,5 +50,80 @@
         <item name="actionMenuTextColor">?colorOnPrimary</item>
         <item name="android:actionMenuTextColor">@color/color_on_primary</item>-->
     </style>
+
+    <!-- To make the Surface toolbar primary not surface, it has better shadow than Surface toolbar (for dark theme)-->
+    <style name="ToolbarStyle.Surface.MyTheme" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">@color/color_surface_24_elevation</item>
+        <item name="titleTextColor">@color/material_on_surface_emphasis_high_type</item>
+        <!--<item name="colorControlNormal">?colorOnPrimary</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
+        <item name="android:actionMenuTextColor">@color/color_on_primary</item>-->
+    </style>
+
+    <!--to change buttons color to lighter color on all dialogs-->
+    <style name="materialAlertDialog.MyTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+
+        <!--<item name="alertDialogStyle">@style/MaterialAlertDialog.MaterialComponents</item>-->
+        <!--<item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.MyTheme.Body2</item>-->
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.BodyTextStyle.MyTheme</item>
+        <item name="colorPrimary">?colorPrimaryVariant</item>
+        <item name="android:backgroundDimAmount">@dimen/alert_dim_amount</item>
+        <!--<item name="android:windowElevation" tools:targetApi="lollipop">@dimen/keyLine_2</item>-->
+
+        <!--<item name="buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>-->
+
+    </style>
+
+    <!--To change the text font of MaterialAlertDialog-->
+    <style name="MaterialAlertDialog.BodyTextStyle.MyTheme" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@drawable/my_on_surface_emphasis_medium</item>
+        <item name="android:textSize">16sp</item>
+        <!--<item name="android:textAppearance">?attr/textAppearanceBody2</item>-->
+    </style>
+
+    <!--to change spinners background color to elevated surface-->
+    <style name="Spinner.MyTheme" parent="Widget.AppCompat.Spinner">
+        <!--Choose a lighter background color for spinner pop up menu -->
+        <item name="android:popupBackground">@color/color_surface_24_elevation</item>
+    </style>
+
+    <!-- Define your custom dialog theme here extending from base -->
+    <style name="DialogTheme.MyTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- Define primary color. used for buttons -->
+        <item name="colorPrimary">?colorPrimaryVariant</item>
+        <!-- Define 24 dp elevated background color -->
+        <item name="android:background">@color/color_surface_24_elevation</item>
+        <!--<item name="android:windowElevation" tools:targetApi="lollipop">@dimen/keyLine_2</item>-->
+        <!--<item name="shapeAppearanceOverlay">@style/ShapeAppearance.MyTheme.DialogComponent</item>-->
+    </style>
+
+    <!-- Define your custom alert theme here extending from base -->
+    <style name="AlertDialogTheme.MyTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Define primary color. used for buttons -->
+        <item name="colorPrimary">?colorPrimaryVariant</item>
+        <!-- Define 24 dp elevated background color -->
+        <item name="android:background">@color/color_surface_24_elevation</item>
+
+        <!--<item name="android:windowElevation" tools:targetApi="lollipop">@dimen/keyLine_2</item>-->
+        <!--<item name="shapeAppearanceOverlay">@style/ShapeAppearance.MyTheme.DialogComponent</item>-->
+    </style>
+
+    <!-- to make the background if all popup (blocking) elevated -->
+    <style name="PopupMenuStyle.MyTheme" parent="Widget.MaterialComponents.PopupMenu">
+        <!--Your custom shape here-->
+        <!--<item name="android:textStyle">bold</item>-->
+        <!--<item name="android:textSize">50sp</item>-->
+        <item name="android:popupBackground">@color/color_surface_24_elevation</item>
+        <!--To darken the text on light surface, it was used when the surface ir white -->
+        <!--<item name="android:textColor">?attr/colorError</item>-->
+    </style>
+
+    <!-- to make the background of option menu elevated (API < 21)-->
+    <style name="OverflowMenuStyle.MyTheme" parent="Widget.MaterialComponents.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/color_surface_24_elevation</item>
+    </style>
+
 
 </resources>

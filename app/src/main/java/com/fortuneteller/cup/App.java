@@ -8,7 +8,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import java.io.File;
+
+import static androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode;
 
 
 /**
@@ -25,6 +29,9 @@ public class App extends Application {
 
         super.onCreate();
         sApplicationContext = getApplicationContext();
+
+        // Set the app to use night mode always, because it's scary app
+        setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
     }
 
