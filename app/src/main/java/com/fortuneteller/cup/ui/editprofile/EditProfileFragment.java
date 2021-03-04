@@ -16,9 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.fortuneteller.cup.Interface.DatabaseUserCallback;
 import com.fortuneteller.cup.databinding.FragmentEditProfileBinding;
+import com.fortuneteller.cup.models.User;
 import com.fortuneteller.cup.ui.DatePickerFragment;
+import com.fortuneteller.cup.ui.main.MainViewModel;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -44,6 +48,8 @@ public class EditProfileFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
+
         mFragmentManager = getChildFragmentManager(); // Needed to open the rational dialog
 
     }
@@ -65,7 +71,7 @@ public class EditProfileFragment extends Fragment  {
                 // Open date picker
                 DatePickerFragment datePicker;
                 datePicker = new DatePickerFragment(mContext);
-                if (getChildFragmentManager() != null) {
+                if (mFragmentManager != null) {
                     datePicker.setCallBack(ondate); //Set Call back to capture selected date
                     datePicker.show(getChildFragmentManager(),"date picker");
                     Log.i(TAG, "datePicker show clicked ");
@@ -77,6 +83,25 @@ public class EditProfileFragment extends Fragment  {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // It's best to observe on onActivityCreated so that we dona't have to update ViewModel manually.
+        // This is because LiveData will not call the observer since it had already delivered the last result to that observer.
+
+        // But recycler adapter is updated any way despite that LiveData delivers updates only when data changes, and only to active observers.
+        // Use getViewLifecycleOwner() instead of this, to get only one observer for this view
+        mViewModel.getUser(1, new DatabaseUserCallback() {
+            @Override
+            public void onCallback(User user) {
+                if(user != null){
+                    Log.d(TAG, "onCallback: user name= "+user.getName());
+                }else{
+                    Log.d(TAG, "onCallback: there is no current user");
+                }
+            }
+        });
+    }
 
 
     @Override

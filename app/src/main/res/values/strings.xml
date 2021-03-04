@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">The Cup Reader</string>
     <string name="welcome_message">Ready to meet your fear?</string>
-    <string name="confirm_button_title">Accept</string>
+    <string name="read_cup_button_title">Read cup</string>
     <string name="next_button_title">Next</string>
 
     <string name="storage_permission_dialog_title">Camera permission</string>
