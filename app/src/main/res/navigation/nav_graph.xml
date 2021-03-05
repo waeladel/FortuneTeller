@@ -12,11 +12,22 @@
         <action
             android:id="@+id/action_mainFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_main_to_scan"
+            app:destination="@id/scanFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.fortuneteller.cup.ui.editprofile.EditProfileFragment"
         android:label="@string/title_edit_profile" />
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.fortuneteller.cup.ui.scan.ScanFragment"
+        android:label="@string/title_scan_fragment" >
+        <argument
+            android:name="imageUri"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

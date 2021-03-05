@@ -12,9 +12,10 @@
     <string name="confirm_dialog_positive_button">OK</string>
     <string name="no_camera_app_error">Sorry, there is no camera app.</string>
 
-    <!--buttons and menus -->
+    <!--buttons and menus and fragments titles -->
     <string name="title_main_fragment">Read Cup</string>
     <string name="title_edit_profile">Edit Profile</string>
+    <string name="title_scan_fragment">Scanning</string>
 
 
     <!-- Answer array -->
@@ -47,6 +48,7 @@
 
     <!--Images content Description-->
     <string name="save_button_description">Save button</string>
+    <string name="scanned_image_description">Scanning your cup image</string>
 
     <!--toast and error messages -->
     <string name="empty_profile_name_error">You must enter your name.</string>

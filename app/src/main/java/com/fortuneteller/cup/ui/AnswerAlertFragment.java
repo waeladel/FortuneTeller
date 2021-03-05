@@ -33,10 +33,13 @@ public class AnswerAlertFragment extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static AnswerAlertFragment newInstance(Context context , String answer) {
+    public static AnswerAlertFragment newInstance(Context context, ItemClickListener itemClickListener, String answer) {
 
         // instantiate click listener to pass click events to parent fragment
         sContext = context;
+
+        // instantiate click listener to pass click events to parent fragment
+        sItemClickListen = itemClickListener;
 
         AnswerAlertFragment fragment = new AnswerAlertFragment();
         Bundle args = new Bundle();
@@ -82,6 +85,10 @@ public class AnswerAlertFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (dialog != null) {
+                    // send click listener to scan fragment to show all answers recycler
+                    if(sItemClickListen != null){
+                        sItemClickListen.onClick(null, 1, false);
+                    }
                     dialog.dismiss();
                 }
             }

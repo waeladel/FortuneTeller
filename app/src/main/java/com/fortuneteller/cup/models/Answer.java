@@ -11,10 +11,10 @@ public class Answer {
 
     private String message;
     //@ColumnInfo(name = "If i want to change the name of the column")
-    private int resource;
+    private long resource;
     private long created;
 
-    public Answer(String message, int resource) {
+    public Answer(String message, long resource) {
         this.message = message;
         this.resource = resource;
         this.created = System.currentTimeMillis();
@@ -36,7 +36,7 @@ public class Answer {
         this.message = message;
     }
 
-    public int getResource() {
+    public long getResource() {
         return resource;
     }
 

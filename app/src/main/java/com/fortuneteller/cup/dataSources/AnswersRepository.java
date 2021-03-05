@@ -40,7 +40,7 @@ public class AnswersRepository {
     // Must user AsyncTask because room doesn't allow make operation on the main thread. Only LiveData Room execute it in the background by default
     private static class InsertAnswerAsyncTask extends AsyncTask<Answer, Void, Void> {
         private AnswersDao answersDao;
-        private InsertAnswerAsyncTask(AnswersDao userDao) {
+        private InsertAnswerAsyncTask(AnswersDao answersDao) {
             this.answersDao = answersDao;
         }
         @Override

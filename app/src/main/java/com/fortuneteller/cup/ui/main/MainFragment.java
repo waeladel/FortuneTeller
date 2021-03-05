@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.provider.MediaStore;
@@ -56,12 +57,12 @@ public class MainFragment extends Fragment implements ItemClickListener {
     private  static final String ANSWER_ALERT_FRAGMENT = "answerAlertFragment";
     private static final int REQUEST_STORAGE_PERMISSIONS_CODE = 124;
     private static final int CAMERA_REQUEST_CODE = 111;
-    // Random number generator
-    private static int mRandomAnswer ;// 0 - 7;
 
     private String[] mTestArray;
     private ArrayAdapter<String> mAdapter;
     private NavController navController ;
+
+    private Uri mMediaUri; // Uri the camera will use to save the photo
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -152,7 +153,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
             return;
         }
         // Create a file location to tell the camera to save the new photo at it
-        Uri mMediaUri = createImageUri(mContext);
+        mMediaUri = createImageUri(mContext);
         if(mMediaUri != null){
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri); // Pass the new file uri in the intent extras
         }
@@ -233,21 +234,25 @@ public class MainFragment extends Fragment implements ItemClickListener {
                 case CAMERA_REQUEST_CODE:
                     // returning from the camera after capture the photo
                     Log.d(TAG, "open camera requestCode= "+ requestCode);
+                    // Open image to scan it
+                    NavDirections scanDirection = MainFragmentDirections.actionMainToScan(String.valueOf(mMediaUri));
+                    navController.navigate(scanDirection);
+
                     // Display the fortune message
-                    Random random = new Random();
+                    /*Random random = new Random();
                     mRandomAnswer = random.nextInt(11) ; // from 0 - 10
 
                     // Create an ArrayAdapter that will contain all list items
                     mTestArray = getResources().getStringArray(R.array.answers_array);
 
-                    /* Assign the name array to that adapter and
-                    also choose a simple layout for the list items */
+                    *//* Assign the name array to that adapter and
+                    also choose a simple layout for the list items *//*
                     mAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mTestArray);
 
                     Log.d(TAG, "onActivityResult: answer= "+mAdapter.getItem(mRandomAnswer));
 
                     AnswerAlertFragment answerAlertFragment = AnswerAlertFragment.newInstance(mContext, mAdapter.getItem(mRandomAnswer));
-                    answerAlertFragment.show(mFragmentManager, ANSWER_ALERT_FRAGMENT);
+                    answerAlertFragment.show(mFragmentManager, ANSWER_ALERT_FRAGMENT);*/
 
                     break;
             }
