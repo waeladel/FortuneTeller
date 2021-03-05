@@ -4,8 +4,8 @@
     <string name="read_cup_button_title">Read cup</string>
     <string name="next_button_title">Next</string>
 
-    <string name="storage_permission_dialog_title">Camera permission</string>
-    <string name="storage_permission_dialog_message">The app needs access to your camera to take a picture of your cup.</string>
+    <string name="storage_permission_dialog_title">Storage permission</string>
+    <string name="storage_permission_dialog_message">The app needs access to your storage to save pictures of your cups.</string>
 
     <string name="confirm_dialog_negative_button">Cancel</string>
     <string name="confirm_dialog_dismiss_button">Dismiss</string>

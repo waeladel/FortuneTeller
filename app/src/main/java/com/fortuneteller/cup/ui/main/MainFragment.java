@@ -30,13 +30,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.fortuneteller.cup.Interface.DatabaseUserCallback;
+import com.fortuneteller.cup.models.User;
 import com.fortuneteller.cup.ui.AnswerAlertFragment;
 import com.fortuneteller.cup.ui.CameraPermissionAlertFragment;
 import com.fortuneteller.cup.Interface.ItemClickListener;
 import com.fortuneteller.cup.R;
 import com.fortuneteller.cup.databinding.FragmentMainBinding;
 
-import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -53,7 +54,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
     private FragmentManager mFragmentManager;
     private  static final String PERMISSION_RATIONALE_FRAGMENT = "cameraPermissionFragment";
     private  static final String ANSWER_ALERT_FRAGMENT = "answerAlertFragment";
-    private static final int REQUEST_CAMERA_PERMISSIONS_CODE = 124;
+    private static final int REQUEST_STORAGE_PERMISSIONS_CODE = 124;
     private static final int CAMERA_REQUEST_CODE = 111;
     // Random number generator
     private static int mRandomAnswer ;// 0 - 7;
@@ -69,6 +70,8 @@ public class MainFragment extends Fragment implements ItemClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         mFragmentManager = getChildFragmentManager(); // Needed to open the rational dialog
         navController = NavHostFragment.findNavController(this);
@@ -88,13 +91,26 @@ public class MainFragment extends Fragment implements ItemClickListener {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Accept button click");
-                if (!isPermissionGranted()) {
-                    requestPermission();
-                }else{
-                    //openCamera();
-                    //playMusic();
-                    navController.navigate(R.id.editProfileFragment);
-                }
+                // Before granting the permissions, lets create profile first if needed
+                mViewModel.getUser(1, new DatabaseUserCallback() {
+                    @Override
+                    public void onCallback(User user) {
+                        if(user != null){
+                            Log.d(TAG, "onCallback: user exist already, his name= "+user.getName());
+                            // User exist already, lets grant permissions then capture the photo
+                            if (!isPermissionGranted()) {
+                                requestPermission();
+                            }else{
+                                openCamera();
+                            }
+                        }else{
+                            Log.d(TAG, "onCallback: there is no current user, lets create profile");
+                            navController.navigate(R.id.editProfileFragment);
+                        }
+                    }
+                });
+
+
             }
         });
 
@@ -104,8 +120,6 @@ public class MainFragment extends Fragment implements ItemClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        //
     }
 
     @Override
@@ -152,24 +166,20 @@ public class MainFragment extends Fragment implements ItemClickListener {
     // If Storage and camera permissions are granted return true so that we stop asking for permissions
     private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
-            return (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+            Log.d(TAG, "is permission Granted= "+ true); // API 29 doesn't need write permission
+            return true;
         }else{
-            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
-
-            return (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+            Log.d(TAG, "is permission Granted= "+(ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED));
+            return (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         }
-
     }
 
     private void requestPermission() {
         // Permission is not granted
         // Should we show an explanation?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // API level 29 Android 10 and higher
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            // API level less than 29 Android 10
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 Log.i(TAG, "requestPermission: permission should show Rationale");
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -179,22 +189,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
                 // No explanation needed; request the permission
                 Log.i(TAG, "requestPermission: No explanation needed; request the permission");
                 // using requestPermissions(new String[] instead of ActivityCompat.requestPermissions(this, new String[] to get onRequestPermissionsResult in the fragment
-                requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSIONS_CODE);
-            }
-        }else{
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
-                Log.i(TAG, "requestPermission: permission should show Rationale");
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                showPermissionRationaleDialog();
-            } else {
-                // No explanation needed; request the permission
-                Log.i(TAG, "requestPermission: No explanation needed; request the permission");
-                // using requestPermissions(new String[] instead of ActivityCompat.requestPermissions(this, new String[] to get onRequestPermissionsResult in the fragment
-                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSIONS_CODE);
+                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSIONS_CODE);
             }
         }
     }
@@ -209,7 +204,7 @@ public class MainFragment extends Fragment implements ItemClickListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult we got a permissions result");
-        if (requestCode == REQUEST_CAMERA_PERMISSIONS_CODE) {
+        if (requestCode == REQUEST_STORAGE_PERMISSIONS_CODE) {
             // If request is cancelled, the result arrays are empty.
             // Camera permission is not a must, we can proceed with reading photos from gallery
             if (grantResults.length > 0 &&
@@ -263,14 +258,10 @@ public class MainFragment extends Fragment implements ItemClickListener {
         Log.d(TAG, "item clicked position= " + position + " View= "+view);
         if(view == null && position == 1){
             // dialog's Positive button clicked
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // API level 29 Android 10 and higher
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                // API level less than 29 Android 10
                 // OK button of the permission dialog is clicked, lets ask for permissions
-                requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSIONS_CODE);
-            }else{
-                // OK button of the permission dialog is clicked, lets ask for permissions
-                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSIONS_CODE);
+                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSIONS_CODE);
             }
 
             return; // No need to check other clicks, it's the OK button of the permission dialog
