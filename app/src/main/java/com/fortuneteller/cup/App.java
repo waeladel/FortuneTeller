@@ -24,6 +24,9 @@ public class App extends Application {
     private static Context sApplicationContext;
     private final static String TAG = Application.class.getSimpleName();
 
+    public static final String USER_SPINNER_GENDER_MALE = "male";
+    public static final String USER_SPINNER_GENDER_FEMALE = "female";
+
     @Override
     public void onCreate() {
 

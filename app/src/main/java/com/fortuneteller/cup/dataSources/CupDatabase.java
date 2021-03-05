@@ -1,6 +1,5 @@
 package com.fortuneteller.cup.dataSources;
 
-import android.app.Application;
 import android.content.Context;
 
 import androidx.room.Database;
@@ -9,10 +8,10 @@ import androidx.room.RoomDatabase;
 
 import com.fortuneteller.cup.Interface.AnswersDao;
 import com.fortuneteller.cup.Interface.UserDao;
-import com.fortuneteller.cup.models.Answers;
+import com.fortuneteller.cup.models.Answer;
 import com.fortuneteller.cup.models.User;
 
-@Database(entities = {User.class, Answers.class}, version = 1)
+@Database(entities = {User.class, Answer.class}, version = 1)
 public abstract class CupDatabase extends RoomDatabase {
 
     // To create a singleton of this database

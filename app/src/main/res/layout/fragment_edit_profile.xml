@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/next_button"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.editprofile.EditProfileFragment" >
+    tools:context=".ui.editprofile.EditProfileFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_inputLayout"
@@ -58,6 +57,7 @@
 
     <Spinner
         android:id="@+id/spinner_gender_value"
+        style="@style/Spinner.MyTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -67,7 +67,6 @@
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/Spinner.MyTheme"
         app:layout_constraintTop_toBottomOf="@+id/gender_title" />
 
     <View
@@ -110,8 +109,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:maxLines="1"
             android:hint='@string/birthday_gender_hint'
+            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/birth_header"
@@ -122,17 +121,17 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
+        android:contentDescription="@string/save_button_description"
         android:focusable="true"
-        app:srcCompat="@drawable/ic_save_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/save_button_description"/>
+        app:srcCompat="@drawable/ic_save_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

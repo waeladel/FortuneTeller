@@ -17,7 +17,7 @@ import com.fortuneteller.cup.models.User;
 public class EditProfileViewModel extends AndroidViewModel {
 
     private UserRepository repository;
-    private User user;
+    private User mUser;
     public EditProfileViewModel(@NonNull Application application) {
         super(application);
 
@@ -25,9 +25,35 @@ public class EditProfileViewModel extends AndroidViewModel {
     }
 
     public void getUser(int userId, DatabaseUserCallback callback) {
-        if(user == null){
+        if(mUser == null){
             repository.getUser(userId, callback);
+        }else{
+            callback.onCallback(mUser);
         }
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        this.mUser = user;
+    }
+
+    public void insert (User user) {
+        repository.insert(user);
+    }
+
+    public void update (User user) {
+        repository.update(user);
+    }
+
+    public void delete (User user) {
+        repository.delete(user);
+    }
+
+    public void deleteAll () {
+        repository.deleteAll();
     }
 
 }

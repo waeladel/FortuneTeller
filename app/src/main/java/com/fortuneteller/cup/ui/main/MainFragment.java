@@ -96,7 +96,10 @@ public class MainFragment extends Fragment implements ItemClickListener {
                     @Override
                     public void onCallback(User user) {
                         if(user != null){
+                            Log.d(TAG, "onCallback: user exist already, his Id= "+user.getId());
                             Log.d(TAG, "onCallback: user exist already, his name= "+user.getName());
+                            Log.d(TAG, "onCallback: user exist already, his gender= "+user.getGender());
+                            Log.d(TAG, "onCallback: user exist already, his birthday= "+user.getBirthDate());
                             // User exist already, lets grant permissions then capture the photo
                             if (!isPermissionGranted()) {
                                 requestPermission();

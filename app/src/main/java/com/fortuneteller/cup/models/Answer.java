@@ -4,7 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Answers {
+public class Answer {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -14,7 +14,7 @@ public class Answers {
     private int resource;
     private long created;
 
-    public Answers(String message, int resource) {
+    public Answer(String message, int resource) {
         this.message = message;
         this.resource = resource;
         this.created = System.currentTimeMillis();

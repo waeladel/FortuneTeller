@@ -24,19 +24,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.fortuneteller.cup.models.Answers;
+import com.fortuneteller.cup.models.Answer;
 import com.fortuneteller.cup.ui.CameraPermissionAlertFragment;
 import com.fortuneteller.cup.Interface.ItemClickListener;
 import com.fortuneteller.cup.R;
 import com.fortuneteller.cup.databinding.FragmentAnswerBinding;
-import com.fortuneteller.cup.ui.editprofile.EditProfileViewModel;
 
 import java.util.List;
-import java.util.Observable;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
@@ -102,9 +99,9 @@ public class AnswerFragment extends Fragment implements ItemClickListener {
         super.onActivityCreated(savedInstanceState);
 
         // Get the answers list to update the recycler view
-        mViewModel.getAnswers().observe(getViewLifecycleOwner(), new Observer<List<Answers>>() {
+        mViewModel.getAnswers().observe(getViewLifecycleOwner(), new Observer<List<Answer>>() {
             @Override
-            public void onChanged(List<Answers> answers) {
+            public void onChanged(List<Answer> answers) {
                 if(answers != null){
                     Log.d(TAG, "onCallback: answer count= "+answers.size());
                 }else{

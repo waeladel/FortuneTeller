@@ -7,8 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.fortuneteller.cup.models.Answers;
-import com.fortuneteller.cup.models.User;
+import com.fortuneteller.cup.models.Answer;
 
 import java.util.List;
 
@@ -16,22 +15,22 @@ import java.util.List;
 public interface AnswersDao {
 
     @Insert
-    void insert(Answers answer);
+    void insert(Answer answer);
 
     @Update
-    void update(Answers answer);
+    void update(Answer answer);
 
     @Delete
-    void delete(Answers answer);
+    void delete(Answer answer);
 
-    @Query("DELETE FROM Answers")
+    @Query("DELETE FROM Answer")
     void deleteAll();
 
-    @Query("SELECT * FROM Answers WHERE id = :answerID  LIMIT 1")
-    Answers getAnswer(int answerID);
+    @Query("SELECT * FROM Answer WHERE id = :answerID  LIMIT 1")
+    Answer getAnswer(int answerID);
 
-    @Query("SELECT * FROM Answers ORDER BY id DESC")
-    //List<Answers> getAnswers();
-    LiveData<List<Answers>> getAnswers(); //if i want to return a live data to observe the changes on the fly
+    @Query("SELECT * FROM Answer ORDER BY id DESC")
+    //List<Answer> getAnswers();
+    LiveData<List<Answer>> getAnswers(); //if i want to return a live data to observe the changes on the fly
 
 }

@@ -17,7 +17,7 @@
     <string name="title_edit_profile">Edit Profile</string>
 
 
-    <!-- Answers array -->
+    <!-- Answer array -->
     <string name="answer1">answer1</string>
     <string name="answer2">answer2</string>
     <string name="answer3">answer3</string>
@@ -29,7 +29,7 @@
     <string name="answer9">answer9</string>
     <string name="answer10">answer10</string>
     <string name="answer11">answer11</string>
-    <!-- Answers array -->
+    <!-- Answer array -->
 
     <!-- gender array -->
     <string name="male">Male</string>
@@ -47,5 +47,9 @@
 
     <!--Images content Description-->
     <string name="save_button_description">Save button</string>
+
+    <!--toast and error messages -->
+    <string name="empty_profile_name_error">You must enter your name.</string>
+
 
 </resources>
