@@ -25,7 +25,7 @@ public class ScanViewModel extends AndroidViewModel {
         super(application);
 
         repository = new AnswersRepository(application);
-        answers = repository.getAnswers();
+        //answers = repository.getAnswers();
 
         mediaPlayer = new MediaPlayer(); //App.getMediaPlayer();
     }

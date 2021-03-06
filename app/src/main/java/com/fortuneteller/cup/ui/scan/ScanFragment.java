@@ -1,12 +1,7 @@
 package com.fortuneteller.cup.ui.scan;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,38 +10,29 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.fortuneteller.cup.Interface.ItemClickListener;
 import com.fortuneteller.cup.R;
-import com.fortuneteller.cup.databinding.FragmentAnswerBinding;
 import com.fortuneteller.cup.databinding.FragmentScanBinding;
 import com.fortuneteller.cup.models.Answer;
 import com.fortuneteller.cup.ui.AnswerAlertFragment;
-import com.fortuneteller.cup.ui.CameraPermissionAlertFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Random;
-
-import static android.app.Activity.RESULT_OK;
-import static com.fortuneteller.cup.Utils.FilesHelper.createImageUri;
 
 public class ScanFragment extends Fragment implements ItemClickListener {
     private final static String TAG = ScanFragment.class.getSimpleName();
@@ -57,11 +43,12 @@ public class ScanFragment extends Fragment implements ItemClickListener {
     private Activity activity;
     private FragmentManager mFragmentManager;
 
-    private String[] mTestArray;
-    private ArrayAdapter<String> mAdapter;
+    private String[] mSpinnerArray;
+    private ArrayAdapter<String> mSpinnerAdapter;
     private Uri mImageUri;
     private Bitmap mBitmap;
     private  static final String ANSWER_ALERT_FRAGMENT = "answerAlertFragment";
+    private NavController navController ;
 
     public static ScanFragment newInstance() {
         return new ScanFragment();
@@ -76,8 +63,8 @@ public class ScanFragment extends Fragment implements ItemClickListener {
         }
 
         mViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
-
         mFragmentManager = getChildFragmentManager(); // Needed to open the rational dialog
+        navController = NavHostFragment.findNavController(this);
 
         try {
             Log.d(TAG, "onAttach: mImageUri= "+ mImageUri);
@@ -145,7 +132,9 @@ public class ScanFragment extends Fragment implements ItemClickListener {
         // Listen to dialog buttons onClick
         Log.d(TAG, "item clicked position= " + position + " View= "+view);
         if(view == null && position == 1){
-            // dialog's Positive button clicked
+            // dialog's Positive button clicked. lets go to answers
+            //navController.navigate(R.id.answersFragment);
+            navController.navigate(R.id.action_scan_to_answers);
 
 
             return; // No need to check other clicks, it's the OK button of the permission dialog
@@ -167,11 +156,11 @@ public class ScanFragment extends Fragment implements ItemClickListener {
             @Override
             public void onFinish() {
                 Log.d(TAG, "mRemainingTimer onFinish.");
-                // End service and UI when timer finishes
+                showAnswer();
+
+                // End UI animation when timer finishes
                 mBinding.radar.stop();
                 mBinding.radarLayout.setVisibility(View.GONE);
-
-                showAnswer();
             }
         }.start();
 
@@ -186,22 +175,23 @@ public class ScanFragment extends Fragment implements ItemClickListener {
         int randomAnswer = random.nextInt(11); // from 0 - 10
 
         // Create an ArrayAdapter that will contain all list items
-        mTestArray = getResources().getStringArray(R.array.answers_array);
+        mSpinnerArray = getResources().getStringArray(R.array.answers_array);
 
         /* Assign the name array to that adapter and
         also choose a simple layout for the list items */
-        mAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mTestArray);
+        mSpinnerAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mSpinnerArray);
 
-        Log.d(TAG, "onActivityResult: answer= "+mAdapter.getItem(randomAnswer));
+        Log.d(TAG, "onActivityResult: answer= "+ mSpinnerAdapter.getItem(randomAnswer));
+        Log.d(TAG, "onActivityResult: answer item id= "+ mSpinnerAdapter.getItemId(randomAnswer));
 
         // Add the answer to database
-        Answer answer = new Answer(mAdapter.getItem(randomAnswer), mAdapter.getItemId(randomAnswer));
+        Answer answer = new Answer(mSpinnerAdapter.getItem(randomAnswer), randomAnswer);
         mViewModel.insert(answer);
 
         // Play theme music
         mViewModel.playMusic();
 
-        AnswerAlertFragment answerAlertFragment = AnswerAlertFragment.newInstance(mContext, this, mAdapter.getItem(randomAnswer));
+        AnswerAlertFragment answerAlertFragment = AnswerAlertFragment.newInstance(mContext, this, mSpinnerAdapter.getItem(randomAnswer));
         answerAlertFragment.show(mFragmentManager, ANSWER_ALERT_FRAGMENT);
 
     }

@@ -8,7 +8,7 @@
     <string name="storage_permission_dialog_message">The app needs access to your storage to save pictures of your cups.</string>
 
     <string name="confirm_dialog_negative_button">Cancel</string>
-    <string name="confirm_dialog_dismiss_button">Dismiss</string>
+    <string name="confirm_dialog_dismiss_button">Accept</string>
     <string name="confirm_dialog_positive_button">OK</string>
     <string name="no_camera_app_error">Sorry, there is no camera app.</string>
 
@@ -16,6 +16,7 @@
     <string name="title_main_fragment">Read Cup</string>
     <string name="title_edit_profile">Edit Profile</string>
     <string name="title_scan_fragment">Scanning</string>
+    <string name="title_answers_fragment">Results</string>
 
 
     <!-- Answer array -->

@@ -2,23 +2,36 @@ package com.fortuneteller.cup.dataSources;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
+import androidx.paging.ItemKeyedDataSource;
+import androidx.paging.PagedList;
+import androidx.paging.PagingSource;
+import androidx.paging.PositionalDataSource;
 
 import com.fortuneteller.cup.Interface.AnswersDao;
 import com.fortuneteller.cup.models.Answer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AnswersRepository {
     private AnswersDao answersDao;
-    private LiveData<List<Answer>> answers;
+    //private PagingSource<Integer, Answer> mAnswers;
 
     public AnswersRepository(Context context) {
         CupDatabase database = CupDatabase.getInstance(context);
         answersDao = database.AnswersDao();
-        answers = answersDao.getAnswers();
     }
+
+    public PagingSource<Integer, Answer> getAnswers() {
+        return answersDao.getAnswers();
+    }
+
 
     public void insert(Answer answer) {
         new InsertAnswerAsyncTask(answersDao).execute(answer);
@@ -33,9 +46,7 @@ public class AnswersRepository {
         new DeleteAllAsyncTask(answersDao).execute();
     }
 
-    public LiveData<List<Answer>> getAnswers() {
-        return answers;
-    }
+
 
     // Must user AsyncTask because room doesn't allow make operation on the main thread. Only LiveData Room execute it in the background by default
     private static class InsertAnswerAsyncTask extends AsyncTask<Answer, Void, Void> {

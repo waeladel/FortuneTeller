@@ -33,6 +33,9 @@
         <!--<item name="android:textColorPrimary">?colorOnPrimary</item>-->
         <!--<item name="android:textColorSecondary">?colorOnBackground</item>-->
 
+        <!--my custom Text Appearance-->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MyTheme.Headline6</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MyTheme.Body2</item>
 
         <!--Component styles-->
         <item name="textInputStyle">@style/EditTextStyle.MyTheme</item>
